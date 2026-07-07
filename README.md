@@ -39,7 +39,7 @@ El agente consulta movimientos del día en Supabase y devuelve un reporte format
 SELECT public.reporte_movimientos_diario();
 ```
 
-Devuelve JSON con `resumen`, `usuarios` y `detalle` del día actual (hora Mérida).
+Devuelve JSON con `resumen` y `usuarios` del día actual (hora Mérida). El agente usa solo esos campos — no lista el detalle individual.
 
 ## Estructura del workspace
 
@@ -71,19 +71,12 @@ SELECT public.reporte_movimientos_diario('2026-07-07'::date);
 ## Ejemplo de reporte esperado
 
 ```
-📊 Reporte Diario — Seguimiento Inventario TD
-📅 martes, 7 de julio de 2026
+📊 Inventario TD — mar 7 jul 2026
 
-Resumen del día: 16 movimientos totales
-• 10 altas · 4 ediciones · 2 asignaciones
+18 movimientos · 11 altas · 5 ediciones · 2 asignaciones
 
-👤 Gabriel Gonzalez — 15 movimiento(s)
-   10 altas de equipos, 4 ediciones, 1 asignación
+Gabriel Gonzalez — 17 (11 altas, 5 ediciones, 1 asignación)
+Samuel Renteria — 1 asignación
 
-Detalle de movimientos:
-🆕 GV-LAP-2026-0001 · alta · 12:22 · Gabriel Gonzalez
-   → Abraham Ulises May Ruelas
-...
-
-> Hoy Gabriel Gonzalez registró 15 movimientos: 10 altas, 4 ediciones y 1 asignación.
+→ Gabriel registró 17 movimientos hoy.
 ```

@@ -19,11 +19,12 @@ Usa el MCP de Supabase (`execute_sql`):
 SELECT public.reporte_movimientos_diario();
 ```
 
-La función devuelve JSON con:
+Usa del JSON solo:
 - `fecha` y `zona_horaria`
 - `resumen`: totales por tipo (`alta`, `edicion`, `reasignacion`)
 - `usuarios`: desglose por persona con conteos
-- `detalle`: lista cronológica con folio, hora, tipo, destino y motivo
+
+**No uses** el campo `detalle` — el reporte es solo resumen, sin listar movimientos individuales.
 
 Para un día específico:
 ```sql
@@ -34,51 +35,60 @@ Consultas de respaldo en el repo: `queries/`
 
 ### 2. Generar el reporte (respuesta final)
 
-Tu respuesta final debe ser el reporte completo en español, con este formato:
+Tu respuesta final debe ser **breve y directa**, fácil de leer en segundos. Solo totales y desglose por persona — **sin detalle de cada movimiento**.
+
+Formato:
 
 ```
-📊 Reporte Diario — Seguimiento Inventario TD
-📅 [fecha legible en español, ej. martes 7 de julio de 2026]
+📊 Inventario TD — [día corto, ej. mar 7 jul 2026]
 
-Resumen del día: X movimientos totales
-• Y altas · Z ediciones · W asignaciones
+X movimientos · Y altas · Z ediciones · W asignaciones
 
-👤 Gabriel Gonzalez — N movimiento(s)
-   [desglose: ej. 9 altas de equipos, 4 ediciones, 1 asignación]
+Gabriel Gonzalez — N (Y altas, Z ediciones, W asignaciones)
+[Otros usuarios en la misma línea, solo si participaron]
 
-[Otros usuarios si participaron]
+→ Gabriel registró N movimientos hoy.
+```
 
-Detalle de movimientos:
+**Ejemplo con actividad:**
 
-🆕 GV-LAP-2026-0001 · alta · 12:22 · Gabriel Gonzalez
-   → Abraham Ulises May Ruelas
+```
+📊 Inventario TD — mar 7 jul 2026
 
-✏️ GV-LAP-2026-0003 · edición · 12:49 · Gabriel Gonzalez
-   Edición de especificaciones del equipo
+18 movimientos · 11 altas · 5 ediciones · 2 asignaciones
 
-📋 GV-LAP-2026-0001 · asignación · 12:24 · Gabriel Gonzalez
-   Abraham Ulises May Ruelas → Abraham Ulises May Ruelas
-   Entrega de equipo · carta responsiva GV-ENT-2026-0001
+Gabriel Gonzalez — 17 (11 altas, 5 ediciones, 1 asignación)
+Samuel Renteria — 1 asignación
+
+→ Gabriel registró 17 movimientos hoy.
+```
+
+**Ejemplo sin actividad:**
+
+```
+📊 Inventario TD — mar 7 jul 2026
+
+Sin movimientos hoy.
 ```
 
 **Reglas:**
-- Emojis por tipo: 🆕 altas, ✏️ ediciones, 📋 asignaciones
-- Destaca primero la actividad de Gabriel Gonzalez
-- Si no hubo movimientos: responde solo con el encabezado y "Sin movimientos registrados hoy en la plataforma."
-- Incluye folio del activo en cada línea del detalle
-- Ordena el detalle cronológicamente
+- Máximo 6 líneas cuando hay actividad
+- Gabriel Gonzalez siempre primero en el desglose por persona
+- Usa números, no párrafos ni listas largas
+- No incluyas folios, horas, destinos ni motivos
+- No incluyas sección "Detalle de movimientos"
+- Si un usuario solo tuvo un tipo, abrevia: `1 asignación` en lugar de `1 (0 altas, 0 ediciones, 1 asignación)`
 
-### 3. Resumen ejecutivo al final
+### 3. Cierre
 
-Cierra con una línea tipo:
-
-> Hoy Gabriel Gonzalez registró N movimientos: X altas, Y ediciones y Z asignaciones.
+Termina siempre con una sola línea `→` sobre la actividad de Gabriel Gonzalez.
+Si no hubo movimientos, omite esa línea.
 
 ## Tipos de movimiento
 
 | Tipo en DB     | Etiqueta en reporte |
 |----------------|---------------------|
-| `alta`         | altas de equipos    |
+| `alta`         | altas               |
 | `edicion`      | ediciones           |
 | `reasignacion` | asignaciones        |
 
@@ -90,5 +100,5 @@ Cierra con una línea tipo:
 
 - No modificar datos en Supabase
 - No crear PRs ni cambiar código del repositorio
-- No omitir el detalle cuando existan movimientos
+- No listar movimientos individuales bajo ningún formato
 - No reportar días anteriores salvo indicación explícita
